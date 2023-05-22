@@ -1,5 +1,6 @@
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,6 +13,7 @@ import static org.hamcrest.Matchers.notNullValue;
 public class UserCreationTest {
     public String username;
     public String email;
+    public String token;
 
     @Before
     public void setUp(){
@@ -31,7 +33,7 @@ public class UserCreationTest {
                 .post("api/auth/register");
 
         response.then().assertThat().body("success", equalTo(true)).and().body("email", equalTo(email))
-                .and().body("name", equalTo(username)).and().body("accessToken", notNullValue()).and().body("resfreshToken", notNullValue());
+                .and().body("name", equalTo(username)).and().body("accessToken", notNullValue()).and().body("refreshToken", notNullValue());
     }
 
     @Test
@@ -66,4 +68,7 @@ public class UserCreationTest {
 
         response.then().statusCode(403).and().assertThat().body("success", equalTo(false)).and().body("message", equalTo("Email, password and name are required fields"));
     }
+
+    @After
+    public void cleanUp(){}
 }

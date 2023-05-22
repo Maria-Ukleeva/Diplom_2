@@ -1,5 +1,6 @@
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +12,7 @@ import static org.hamcrest.Matchers.*;
 public class LoginTest {
     public String username;
     public String email;
+    public String token;
 
     @Before
     public void setUp(){
@@ -62,7 +64,22 @@ public class LoginTest {
                 .body(credentials)
                 .when()
                 .post("api/auth/login");
+        token = response.body().as(Session.class).getAccessToken();
 
         response.then().statusCode(401).and().assertThat().body("message", equalTo("email or password are incorrect"));
+    }
+
+    @After
+    public void logout(){
+
+        given()
+                .header("Content-type", "application/json")
+                .and()
+                .body("{\n" +
+                        "\"token\": \""+token+"\"\n" +
+                        "}")
+                .when()
+                .post("api/auth/logout");
+
     }
 }
