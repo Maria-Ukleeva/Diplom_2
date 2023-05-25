@@ -7,6 +7,7 @@ import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class GetOrdersTest {
     public String username;
@@ -28,7 +29,7 @@ public class GetOrdersTest {
     }
 
     @Test
-    public void shouldGetOrdersWhenAuthorized() {
+    public void shouldGetUserOrdersWhenAuthorized() {
         Credentials credentials = new Credentials(email, "password");
         Response response = given()
                 .header("Content-type", "application/json")
@@ -41,11 +42,30 @@ public class GetOrdersTest {
 
         Response response1 = given()
                 .header("Content-type", "application/json")
-                .and()
-                .body("{\"token\": \"" + token + "\"}")
-                .when()
-                .get("api/auth/orders");
+                .auth()
+                .oauth2(token)
+                .get("api/orders");
 
-        response1.then().body("success", equalTo(true));
+        response1.then().body("success", equalTo(true)).and().body("orders", notNullValue());
     }
+
+    @Test
+    public void shouldReturnErrorWhenUnauthorized() {
+
+        Response response1 = given()
+                .header("Content-type", "application/json")
+                .get("api/orders");
+
+        response1.then().statusCode(401).body("success", equalTo(false)).and().body("message", equalTo( "You should be authorised"));
+    }
+
+    @Test
+    public void shouldGetAllOrders() {
+        Response response1 = given()
+                .header("Content-type", "application/json")
+                .get("api/orders/all");
+
+        response1.then().body("success", equalTo(true)).and().body("orders", notNullValue());
+    }
+
 }

@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.notNullValue;
 public class UserCreationTest {
     public String username;
     public String email;
-    public String token;
+    public String accessToken;
 
     @Before
     public void setUp(){
@@ -32,8 +32,9 @@ public class UserCreationTest {
                 .when()
                 .post("api/auth/register");
 
-        response.then().assertThat().body("success", equalTo(true)).and().body("email", equalTo(email))
-                .and().body("name", equalTo(username)).and().body("accessToken", notNullValue()).and().body("refreshToken", notNullValue());
+        response.then().assertThat().body("success", equalTo(true)).and().body("user.email", equalTo(email))
+                .and().body("user.name", equalTo(username)).and().body("accessToken", notNullValue()).and().body("refreshToken", notNullValue());
+        accessToken = response.then().extract().path("accessToken").toString().substring(7);
     }
 
     @Test
@@ -70,5 +71,13 @@ public class UserCreationTest {
     }
 
     @After
-    public void cleanUp(){}
+    public void cleanUp() {
+        if (accessToken != null) {
+            given()
+                    .header("Content-type", "application/json")
+                    .auth()
+                    .oauth2(accessToken)
+                    .delete("api/auth/user");
+        }
+    }
 }

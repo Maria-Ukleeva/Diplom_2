@@ -70,16 +70,13 @@ public class LoginTest {
     }
 
     @After
-    public void logout(){
-
-        given()
-                .header("Content-type", "application/json")
-                .and()
-                .body("{\n" +
-                        "\"token\": \""+token+"\"\n" +
-                        "}")
-                .when()
-                .post("api/auth/logout");
-
+    public void cleanUp() {
+        if (token != null) {
+            given()
+                    .header("Content-type", "application/json")
+                    .auth()
+                    .oauth2(token)
+                    .delete("api/auth/user");
+        }
     }
 }
