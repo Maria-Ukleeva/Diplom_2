@@ -28,7 +28,6 @@ public class UserDataChangeTest {
                 .when()
                 .post("api/auth/register");
     }
-//Добавить параметризацию, что можно изменить оба поля
     @Test
     public void shouldSuccessfullyChangeDataWhenAuthorized() {
         Credentials credentials = new Credentials(email, "password");
