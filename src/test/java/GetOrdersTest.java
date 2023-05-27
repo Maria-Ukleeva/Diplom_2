@@ -1,6 +1,7 @@
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,11 +28,6 @@ public class GetOrdersTest {
                 .body(user)
                 .when()
                 .post("api/auth/register");
-    }
-
-    @Test
-    @DisplayName("Получение заказов конкретного пользователя с авторизацией")
-    public void shouldGetUserOrdersWhenAuthorized() {
         Credentials credentials = new Credentials(email, "password");
         Response response = given()
                 .header("Content-type", "application/json")
@@ -41,7 +37,11 @@ public class GetOrdersTest {
                 .post("api/auth/login");
 
         token = response.body().as(Session.class).getAccessToken().substring(7);
+    }
 
+    @Test
+    @DisplayName("Получение заказов конкретного пользователя с авторизацией")
+    public void shouldGetUserOrdersWhenAuthorized() {
         Response response1 = given()
                 .header("Content-type", "application/json")
                 .auth()
@@ -60,6 +60,15 @@ public class GetOrdersTest {
                 .get("api/orders");
 
         response1.then().statusCode(401).body("success", equalTo(false)).and().body("message", equalTo( "You should be authorised"));
+    }
+
+    @After
+    public void cleanUp() {
+        given()
+                .header("Content-type", "application/json")
+                .auth()
+                .oauth2(token)
+                .delete("api/auth/user");
     }
 
 }

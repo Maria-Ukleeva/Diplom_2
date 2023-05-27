@@ -1,6 +1,7 @@
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -98,5 +99,13 @@ public class CreateOrderTest {
                 .post("api/orders");
         response.then().statusCode(400).and().body("success", equalTo(false)).and().body("message", equalTo("Ingredient ids must be provided"));
     }
+    @After
+    public void cleanUp() {
+            given()
+                    .header("Content-type", "application/json")
+                    .auth()
+                    .oauth2(token)
+                    .delete("api/auth/user");
+        }
 
 }
