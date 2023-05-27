@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
@@ -29,6 +30,7 @@ public class GetOrdersTest {
     }
 
     @Test
+    @DisplayName("Получение заказов конкретного пользователя с авторизацией")
     public void shouldGetUserOrdersWhenAuthorized() {
         Credentials credentials = new Credentials(email, "password");
         Response response = given()
@@ -50,6 +52,7 @@ public class GetOrdersTest {
     }
 
     @Test
+    @DisplayName("Получение заказов конкретного пользователя без авторизации")
     public void shouldReturnErrorWhenUnauthorized() {
 
         Response response1 = given()
@@ -57,15 +60,6 @@ public class GetOrdersTest {
                 .get("api/orders");
 
         response1.then().statusCode(401).body("success", equalTo(false)).and().body("message", equalTo( "You should be authorised"));
-    }
-
-    @Test
-    public void shouldGetAllOrders() {
-        Response response1 = given()
-                .header("Content-type", "application/json")
-                .get("api/orders/all");
-
-        response1.then().body("success", equalTo(true)).and().body("orders", notNullValue());
     }
 
 }

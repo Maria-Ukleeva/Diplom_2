@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
@@ -29,6 +30,7 @@ public class LoginTest {
     }
 
     @Test
+    @DisplayName("Логин под существующим пользователем")
     public void shouldSuccessfullyLoginWithCorrectCredentials(){
         Credentials credentials = new Credentials(email, "password");
         Response response = given()
@@ -44,7 +46,8 @@ public class LoginTest {
     }
 
     @Test
-    public void shouldReturnErrorIfCredentialsIncorrect(){
+    @DisplayName("Логин с неверным паролем")
+    public void shouldReturnErrorIfPasswordIncorrect(){
         Credentials credentials = new Credentials(email, "psswrd");
         Response response = given()
                 .header("Content-type", "application/json")
@@ -55,16 +58,17 @@ public class LoginTest {
 
         response.then().statusCode(401).and().assertThat().body("message", equalTo("email or password are incorrect"));
     }
+
     @Test
-    public void shouldReturnErrorIfFieldIsMissing(){
-        Credentials credentials = new Credentials(email);
+    @DisplayName("Логин с неверным логином")
+    public void shouldReturnErrorIfUsernameIncorrect(){
+        Credentials credentials = new Credentials("1"+email, "password");
         Response response = given()
                 .header("Content-type", "application/json")
                 .and()
                 .body(credentials)
                 .when()
                 .post("api/auth/login");
-        token = response.body().as(Session.class).getAccessToken();
 
         response.then().statusCode(401).and().assertThat().body("message", equalTo("email or password are incorrect"));
     }

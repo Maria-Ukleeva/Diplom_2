@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
@@ -29,6 +30,7 @@ public class UserDataChangeTest {
                 .post("api/auth/register");
     }
     @Test
+    @DisplayName("Изменение данных пользователя с авторизацией")
     public void shouldSuccessfullyChangeDataWhenAuthorized() {
         Credentials credentials = new Credentials(email, "password");
         Response response = given()
@@ -53,17 +55,13 @@ public class UserDataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение данных пользователя без авторизации")
     public void shouldReturnErrorChangeDataWhenUnauthorized() {
-
+        User user = new User("1"+email, "password1", "name");
         Response response = given()
                 .header("Content-type", "application/json")
                 .and()
-                .body("{\n" +
-                        "\"email\": \"" + email + "\",\n" +
-                        "\"password\": \"password\",\n" +
-                        "\"name\": \"name\",\n" +
-                        "\"token\": \"\"\n" +
-                        "}")
+                .body(user)
                 .when()
                 .patch("api/auth/user");
 
@@ -71,6 +69,7 @@ public class UserDataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение данных пользователя на уже занятый email с авторизацией")
     public void shouldReturnErrorChangeDataWhenEmailIsUsed() {
         Credentials credentials1 = new Credentials(email, "password");
         Response response = given()

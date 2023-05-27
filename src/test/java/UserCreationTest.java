@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
@@ -23,6 +24,7 @@ public class UserCreationTest {
     }
 
     @Test
+    @DisplayName("Создание нового уникального пользователя")
     public void shouldCreateNewUniqueUser(){
         User user = new User(email, "password", username);
         Response response = given()
@@ -38,6 +40,7 @@ public class UserCreationTest {
     }
 
     @Test
+    @DisplayName("Создание пользователя, который уже зарегистрирован")
     public void shouldReturnErrorIfUserExists(){
         User user = new User(email, "password", username);
         given()
@@ -58,6 +61,7 @@ public class UserCreationTest {
     }
 
     @Test
+    @DisplayName("Создание пользователя без одного из обязательных полей")
     public void shouldReturnErrorIfFieldIsMissing(){
         User user = new User("password", username);
         Response response = given()
