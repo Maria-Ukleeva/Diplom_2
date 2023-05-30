@@ -25,15 +25,4 @@ public class UserApi {
                 .patch(Endpoints.USER);
     }
 
-    public static void deleteUser(String accessToken) {
-        try {
-            given()
-                    .baseUri(Endpoints.BASEURL)
-                    .header("Content-type", "application/json")
-                    .auth()
-                    .oauth2(accessToken)
-                    .delete(Endpoints.REGISTER);
-        } catch (NullPointerException ignored) {
-        }
-    }
 }

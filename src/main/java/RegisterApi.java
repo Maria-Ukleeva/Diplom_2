@@ -47,7 +47,7 @@ public class RegisterApi {
                     .header("Content-type", "application/json")
                     .auth()
                     .oauth2(accessToken)
-                    .delete(Endpoints.REGISTER);
+                    .delete(Endpoints.USER);
             System.out.println("Юзер удален");
         } catch (NullPointerException ignored){}
         }
