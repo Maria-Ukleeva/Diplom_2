@@ -38,6 +38,6 @@ public class LoginTest {
 
     @After
     public void cleanUp() {
-        LoginApi.deleteUser();
+        RegisterApi.deleteUser();
         }
 }

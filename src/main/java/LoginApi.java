@@ -55,15 +55,5 @@ public class LoginApi {
     public static String getAccessToken(){
         return response.then().extract().path("accessToken").toString().substring(7);
     }
-    public static void deleteUser(){
-        try{
-            String accessToken = getAccessToken();
-            given()
-                    .baseUri(Endpoints.BASEURL)
-                    .header("Content-type", "application/json")
-                    .auth()
-                    .oauth2(accessToken)
-                    .delete(Endpoints.REGISTER);
-        } catch (NullPointerException ignored){}
-    }
+
 }

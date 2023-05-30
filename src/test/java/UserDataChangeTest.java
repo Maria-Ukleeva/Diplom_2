@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.equalTo;
 
 public class UserDataChangeTest {
-    
+
     public String token;
     public User user;
 
@@ -50,6 +50,6 @@ public class UserDataChangeTest {
 
     @After
     public void cleanUp() {
-        UserApi.deleteUser(token);
+        RegisterApi.deleteUser();
         }
     }
