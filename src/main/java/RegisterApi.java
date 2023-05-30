@@ -9,6 +9,8 @@ public class RegisterApi {
     public static String username;
     @Getter
     public static String email;
+    @Getter
+    public static String password;
     public static Response response;
 
 
@@ -16,13 +18,14 @@ public class RegisterApi {
         Faker faker = new Faker();
         username = faker.name().firstName();
         email = faker.internet().emailAddress();
-        return new User(email, Password.PASSWORD, username);
+        password = faker.internet().password(6, 10);
+        return new User(email, password, username);
     }
 
     public static User createUserWithoutAField() {
         Faker faker = new Faker();
         username = faker.name().firstName();
-        return new User(Password.PASSWORD, username);
+        return new User(password, username);
     }
 
     public static Response registerUser(User user){
