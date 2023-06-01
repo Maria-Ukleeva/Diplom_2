@@ -1,15 +1,11 @@
 import com.github.javafaker.Faker;
 import io.restassured.response.Response;
-import lombok.Getter;
 import static io.restassured.RestAssured.given;
 
 public class RegisterApi {
 
-    @Getter
     public static String username;
-    @Getter
     public static String email;
-    @Getter
     public static String password;
     public static Response response;
 

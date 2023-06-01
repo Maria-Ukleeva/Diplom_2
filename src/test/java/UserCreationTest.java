@@ -12,8 +12,8 @@ public class UserCreationTest {
     public void shouldCreateNewUniqueUser(){
         User user = RegisterApi.createUser();
         Response response = RegisterApi.registerUser(user);
-        response.then().assertThat().body("success", equalTo(true)).and().body("user.email", equalTo(RegisterApi.getEmail()))
-                .and().body("user.name", equalTo(RegisterApi.getUsername())).and().body("accessToken", notNullValue()).and().body("refreshToken", notNullValue());
+        response.then().assertThat().body("success", equalTo(true)).and().body("user.email", equalTo(RegisterApi.email))
+                .and().body("user.name", equalTo(RegisterApi.username)).and().body("accessToken", notNullValue()).and().body("refreshToken", notNullValue());
     }
 
     @Test
