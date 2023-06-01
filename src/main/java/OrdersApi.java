@@ -42,18 +42,6 @@ public class OrdersApi {
                 .post(Endpoints.ORDERS);
     }
 
-    public static Response createOrderWithoutIngredients(String token){
-        Order order = new Order();
-        return given()
-                .baseUri(Endpoints.BASEURL)
-                .header("Content-type", "application/json")
-                .auth()
-                .oauth2(token)
-                .and()
-                .body(order)
-                .post(Endpoints.ORDERS);
-    }
-
     public static List<String> getIngredient(){
         Response response = given()
                 .baseUri(Endpoints.BASEURL)

@@ -14,8 +14,10 @@ public class GetOrdersTest {
     @Before
     public void setUp() {
         user = RegisterApi.createUser();
+        String email = user.getEmail();
+        String password = user.getPassword();
         RegisterApi.registerUser(user);
-        LoginApi.loginUser(user);
+        LoginApi.loginUser(email, password);
         token = LoginApi.getAccessToken();
     }
 

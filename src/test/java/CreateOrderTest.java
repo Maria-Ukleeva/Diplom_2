@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,8 +17,10 @@ public class CreateOrderTest {
     @Before
     public void setUp() {
         user = RegisterApi.createUser();
+        String email = user.getEmail();
+        String password = user.getPassword();
         RegisterApi.registerUser(user);
-        LoginApi.loginUser(user);
+        LoginApi.loginUser(email, password);
         token = LoginApi.getAccessToken();
     }
 
@@ -47,7 +50,8 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Создание заказа без ингридиентов")
     public void shouldReturnErrorForNoIngredients(){
-        Response response = OrdersApi.createOrderWithoutIngredients(token);
+        List<String> ingredientIds = new ArrayList<>();
+        Response response = OrdersApi.createOrderWithAuthorization(ingredientIds, token);
         response.then().statusCode(400).and().body("success", equalTo(false)).and().body("message", equalTo("Ingredient ids must be provided"));
     }
     @After
